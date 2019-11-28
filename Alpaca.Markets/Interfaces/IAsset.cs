@@ -32,6 +32,11 @@ namespace Alpaca.Markets
         String Symbol { get; }
 
         /// <summary>
+        /// Gets asset description.
+        /// </summary>
+        String Name { get; }
+
+        /// <summary>
         /// Get asset status in API.
         /// </summary>
         AssetStatus Status { get; }

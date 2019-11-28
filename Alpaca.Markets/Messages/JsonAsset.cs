@@ -21,6 +21,9 @@ namespace Alpaca.Markets
         [JsonProperty(PropertyName = "symbol", Required = Required.Always)]
         public String Symbol { get; set; }
 
+        [JsonProperty(PropertyName = "name", Required = Required.Default)]
+        public String Name { get; set; }
+
         [JsonProperty(PropertyName = "status", Required = Required.Always)]
         public AssetStatus Status { get; set; }
 
