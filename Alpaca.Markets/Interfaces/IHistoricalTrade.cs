@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Alpaca.Markets
 {
@@ -7,6 +8,26 @@ namespace Alpaca.Markets
     /// </summary>
     public interface IHistoricalTrade
     {
+        /// <summary>
+        /// Gets condition 1 of this trade.
+        /// </summary>
+        Int32 Condition1 { get; }
+
+        /// <summary>
+        /// Gets condition 2 of this trade.
+        /// </summary>
+        Int32 Condition2 { get; }
+
+        /// <summary>
+        /// Gets condition 3 of this trade.
+        /// </summary>
+        Int32 Condition3 { get; }
+
+        /// <summary>
+        /// Gets condition 4 of this trade.
+        /// </summary>
+        Int32 Condition4 { get; }
+
         /// <summary>
         /// Gets trade source exchange.
         /// </summary>
