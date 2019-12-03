@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Alpaca.Markets
 {
@@ -26,6 +27,11 @@ namespace Alpaca.Markets
         /// Gets trade quantity.
         /// </summary>
         Int64 Size { get; }
+
+        /// <summary>
+        /// Gets trade conditions.
+        /// </summary>
+        IEnumerable<Int32> Conditions { get; }
 
         /// <summary>
         /// Gets trade timestamp.

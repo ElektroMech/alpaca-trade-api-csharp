@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -16,6 +17,9 @@ namespace Alpaca.Markets
         [JsonProperty(PropertyName = "x", Required = Required.Always)]
         public Int64 Exchange { get; set; }
 
+        [JsonProperty(PropertyName = "c", Required = Required.Always)]
+        public IEnumerable<int> Conditions { get; set; }
+
         [JsonProperty(PropertyName = "p", Required = Required.Always)]
         public Decimal Price { get; set; }
 
@@ -27,6 +31,7 @@ namespace Alpaca.Markets
 
         [JsonIgnore]
         public DateTime Time { get; private set; }
+
 
         [OnDeserialized]
         internal void OnDeserializedMethod(
