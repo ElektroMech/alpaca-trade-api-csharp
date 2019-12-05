@@ -314,6 +314,24 @@ namespace Alpaca.Markets
                     kvp => kvp.Value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<ISingleSnapshot> GetSingleTicker(String symbol, CancellationToken cancellationToken = default)
+        {
+            var builder = new UriBuilder(_polygonHttpClient.BaseAddress)
+            {
+                Path = $"v2/snapshot/locale/us/markets/stocks/tickers/{symbol}",
+                Query = getDefaultPolygonApiQueryBuilder()
+            };
+
+            return getSingleObjectAsync<ISingleSnapshot, JsonSingleSnapshot>(
+                _polygonHttpClient, FakeThrottler.Instance, builder, cancellationToken);
+        }
+
         private QueryBuilder getDefaultPolygonApiQueryBuilder()
         {
             var builder = new QueryBuilder()
