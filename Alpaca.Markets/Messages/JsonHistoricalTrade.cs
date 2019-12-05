@@ -10,16 +10,16 @@ namespace Alpaca.Markets
     internal class JsonHistoricalTrade : IHistoricalTrade
     {
         [JsonProperty(PropertyName = "c1", Required = Required.Always)]
-        public Int32 Condition1 { get; }
+        public Int32 Condition1 { get; set; }
 
         [JsonProperty(PropertyName = "c2", Required = Required.Always)]
-        public Int32 Condition2 { get; }
+        public Int32 Condition2 { get; set; }
 
         [JsonProperty(PropertyName = "c3", Required = Required.Always)]
-        public Int32 Condition3 { get; }
+        public Int32 Condition3 { get; set; }
 
         [JsonProperty(PropertyName = "c4", Required = Required.Always)]
-        public Int32 Condition4 { get; }
+        public Int32 Condition4 { get; set; }
 
         [JsonProperty(PropertyName = "e", Required = Required.Always)]
         public String Exchange { get; set; }
