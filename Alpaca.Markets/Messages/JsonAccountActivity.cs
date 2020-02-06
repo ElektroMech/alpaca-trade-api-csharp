@@ -42,7 +42,7 @@ namespace Alpaca.Markets
         public Decimal? Price { get; set; }
 
         [JsonProperty(PropertyName = "side", Required = Required.Default)]
-        public OrderSide? Side { get; set; }
+        public ActivityOrderSide? Side { get; set; }
 
         [JsonProperty(PropertyName = "transaction_time", Required = Required.Default)]
         public DateTime? TransactionTime { get; set; }

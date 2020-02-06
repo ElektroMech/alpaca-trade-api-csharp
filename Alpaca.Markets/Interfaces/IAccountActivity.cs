@@ -60,7 +60,7 @@ namespace Alpaca.Markets
         /// <summary>
         /// The order side of a trade execution.
         /// </summary>
-        OrderSide? Side { get; }
+        ActivityOrderSide? Side { get; }
 
         /// <summary>
         /// The time at which an execution occurred.
