@@ -111,5 +111,10 @@ namespace Alpaca.Markets
         /// Gets current order status.
         /// </summary>
         OrderStatus OrderStatus { get; }
+
+        /// <summary>
+        /// Is eligible for execution outside regular trading hours.
+        /// </summary>
+        Boolean InExtendedHours { get; }
     }
 }

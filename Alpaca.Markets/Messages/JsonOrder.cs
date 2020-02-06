@@ -71,5 +71,8 @@ namespace Alpaca.Markets
 
         [JsonProperty(PropertyName = "status", Required = Required.Always)]
         public OrderStatus OrderStatus { get; set; }
+        
+        [JsonProperty(PropertyName = "extended_hours", Required = Required.Default)]
+        public bool InExtendedHours { get; set; }
     }
 }
