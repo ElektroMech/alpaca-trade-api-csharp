@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Alpaca.Markets
@@ -74,5 +76,13 @@ namespace Alpaca.Markets
         
         [JsonProperty(PropertyName = "extended_hours", Required = Required.Default)]
         public bool InExtendedHours { get; set; }
+
+        [JsonProperty(PropertyName = "legs", Required = Required.Default)]
+        public List<JsonOrder> LegsList { get; set; }
+
+        [JsonIgnore]
+        public IReadOnlyList<IOrder> Legs => this.LegsList == null 
+            ? new List<IOrder>() 
+            : this.LegsList.Cast<IOrder>().ToList();
     }
 }

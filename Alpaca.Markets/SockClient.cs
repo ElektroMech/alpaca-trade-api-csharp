@@ -10,7 +10,7 @@ namespace Alpaca.Markets
     /// Provides unified type-safe access for Alpaca streaming API.
     /// </summary>
     [SuppressMessage(
-        "Globalization","CA1303:Do not pass literals as localized parameters",
+        "Globalization", "CA1303:Do not pass literals as localized parameters",
         Justification = "We do not plan to support localized exception messages in this SDK.")]
     // ReSharper disable once PartialTypeWithSinglePart
     public sealed partial class SockClient : SockClientBase
@@ -34,6 +34,7 @@ namespace Alpaca.Markets
         private readonly String _keyId;
 
         private readonly String _secretKey;
+        private readonly String _oauth_token;
 
         /// <summary>
         /// Creates new instance of <see cref="SockClient"/> object.
@@ -84,6 +85,21 @@ namespace Alpaca.Markets
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="oAuthToken"></param>
+        /// <param name="alpacaRestApi"></param>
+        /// <param name="webSocketFactory"></param>
+        public SockClient(
+            String oAuthToken,
+            String alpacaRestApi = null,
+            IWebSocketFactory webSocketFactory = null)
+            : this("", "", alpacaRestApi, webSocketFactory)
+        {
+            _oauth_token = oAuthToken;
+        }
+
+        /// <summary>
         /// Occured when new account update received from stream.
         /// </summary>
         public event Action<IAccountUpdate> OnAccountUpdate;
@@ -96,14 +112,14 @@ namespace Alpaca.Markets
         /// <inheritdoc/>
         protected override void OnOpened()
         {
-            SendAsJsonString(new JsonAuthRequest
+            object dataRequest = !string.IsNullOrEmpty(this._oauth_token)
+                ? new JsonOAuthData() { oAuthToken = _oauth_token } as object
+                : new JsonSecretData() { KeyId = _keyId, SecretKey = _secretKey } as object;
+
+            this.SendAsJsonString(new JsonAuthRequest
             {
                 Action = JsonAction.Authenticate,
-                Data = new JsonAuthRequest.JsonData()
-                {
-                    KeyId = _keyId,
-                    SecretKey = _secretKey
-                }
+                Data = dataRequest
             });
 
             base.OnOpened();

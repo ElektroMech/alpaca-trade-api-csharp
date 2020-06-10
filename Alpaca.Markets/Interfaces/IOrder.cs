@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Alpaca.Markets
 {
@@ -116,5 +117,10 @@ namespace Alpaca.Markets
         /// Is eligible for execution outside regular trading hours.
         /// </summary>
         Boolean InExtendedHours { get; }
+
+        /// <summary>
+        /// Gets legs for this order.
+        /// </summary>
+        IReadOnlyList<IOrder> Legs { get; }
     }
 }

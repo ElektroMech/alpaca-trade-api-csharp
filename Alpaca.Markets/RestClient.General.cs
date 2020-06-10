@@ -170,6 +170,7 @@ namespace Alpaca.Markets
         /// <param name="untilDateTimeExclusive">Returns only orders until specified timestamp (exclusive).</param>
         /// <param name="afterDateTimeExclusive">Returns only orders after specified timestamp (exclusive).</param>
         /// <param name="limitOrderNumber">Maximal number of orders in response.</param>
+        /// <param name="nested">If true, the result will roll up multi-leg orders under the legs field of primary order.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Read-only list of order information objects.</returns>
         public Task<IReadOnlyList<IOrder>> ListOrdersAsync(
@@ -178,6 +179,7 @@ namespace Alpaca.Markets
             DateTime? untilDateTimeExclusive = null,
             DateTime? afterDateTimeExclusive = null,
             Int64? limitOrderNumber = null,
+            Boolean? nested = null, 
             CancellationToken cancellationToken = default)
         {
             var builder = new UriBuilder(_alpacaHttpClient.BaseAddress)
@@ -189,7 +191,8 @@ namespace Alpaca.Markets
                     .AddParameter("until", untilDateTimeExclusive, "O")
                     .AddParameter("after", afterDateTimeExclusive, "O")
                     .AddParameter("limit", limitOrderNumber)
-            };
+                    .AddParameter("nested", nested)
+            };              
 
             return getObjectsListAsync<IOrder, JsonOrder>(
                 _alpacaHttpClient, _alpacaRestApiThrottler, builder, cancellationToken);
@@ -207,6 +210,10 @@ namespace Alpaca.Markets
         /// <param name="stopPrice">Order stop price.</param>
         /// <param name="clientOrderId">Client order ID.</param>
         /// <param name="extendedHours">Whether or not this order should be allowed to execute during extended hours trading.</param>
+        /// <param name="orderClass">Order class for advanced order types.</param>
+        /// <param name="takeProfitLimitPrice">Profit taking limit price for advanced order types.</param>
+        /// <param name="stopLossStopPrice">Stop loss stop price for advanced order types.</param>
+        /// <param name="stopLossLimitPrice">Stop loss limit price for advanced order types.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Read-only order information object for newly created order.</returns>
         public async Task<IOrder> PostOrderAsync(
@@ -219,12 +226,33 @@ namespace Alpaca.Markets
             Decimal? stopPrice = null,
             String clientOrderId = null,
             Boolean? extendedHours = null,
+            OrderClass? orderClass = null,
+            Decimal? takeProfitLimitPrice = null,
+            Decimal? stopLossStopPrice = null,
+            Decimal? stopLossLimitPrice = null,
             CancellationToken cancellationToken = default)
         {
             if (!String.IsNullOrEmpty(clientOrderId) &&
                 clientOrderId.Length > 48)
             {
                 clientOrderId = clientOrderId.Substring(0, 48);
+            }
+
+            JsonNewOrderAdvancedAttributes takeProfit = null, stopLoss = null;
+            if (takeProfitLimitPrice != null)
+            {
+                takeProfit = new JsonNewOrderAdvancedAttributes
+                {
+                    LimitPrice = takeProfitLimitPrice
+                };
+            }
+            if (stopLossStopPrice != null || stopLossLimitPrice != null)
+            {
+                stopLoss = new JsonNewOrderAdvancedAttributes
+                {
+                    StopPrice = stopLossStopPrice,
+                    LimitPrice = stopLossLimitPrice
+                };
             }
 
             var newOrder = new JsonNewOrder
@@ -237,7 +265,10 @@ namespace Alpaca.Markets
                 LimitPrice = limitPrice,
                 StopPrice = stopPrice,
                 ClientOrderId = clientOrderId,
-                ExtendedHours = extendedHours
+                ExtendedHours = extendedHours,
+                OrderClass = orderClass,
+                TakeProfit = takeProfit,
+                StopLoss = stopLoss,
             };
 
             await _alpacaRestApiThrottler.WaitToProceed(cancellationToken).ConfigureAwait(false);

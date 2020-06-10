@@ -20,6 +20,10 @@ namespace Alpaca.Markets
             return this;
         }
 
+        public QueryBuilder AddParameter(
+            String name,
+            Boolean? value) => this.addParameter(name, value, v => v.ToString(CultureInfo.InvariantCulture));
+
         public QueryBuilder AddParameter<TValue>(
             String name,
             TValue? value)
